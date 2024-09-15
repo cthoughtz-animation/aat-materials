@@ -24,6 +24,7 @@ class FavoriteButton @JvmOverloads constructor(
 
     private val binding: ViewFavoriteButtonBinding =
         ViewFavoriteButtonBinding.inflate(LayoutInflater.from(context), this)
+    private val animators = mutableListOf<ValueAnimator>()
 
     init {
         layoutParams = LayoutParams(
@@ -123,11 +124,33 @@ class FavoriteButton @JvmOverloads constructor(
             isVisible = true
         }
 
+        animators.addAll(listOf(widthAnimator,alphaAnimator))
+
         /**
          * Finally, you start the animation
          * */
         widthAnimator.start()
         alphaAnimator.start()
+    }
+
+    private fun reverseAnimation() {
+        /**
+         * You loop over the animations list one by one
+         * */
+        animators.forEach { animation ->
+            /**
+             * Then, you call reverse on each animation. Yep! It's that easy, just a single function
+             * call.
+             * */
+            animation.reverse()
+            /**
+             * ONce all the animations are reversed, you clear out the list to keep it tidy and to
+             * avoid adding duplicate references to it the next time the animation triggers
+             * */
+            if (animators.indexOf(animation) == animators.lastIndex) {
+                animators.clear()
+            }
+        }
     }
 
 
@@ -139,7 +162,7 @@ class FavoriteButton @JvmOverloads constructor(
             isFocusable = true
         }
 
-        //TODO reverse the animations
+        reverseAnimation()
     }
 
 }
