@@ -1,5 +1,6 @@
 package com.raywenderlich.cinematic.details
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
@@ -96,11 +97,13 @@ class FavoriteButton @JvmOverloads constructor(
          * the size after the animation is complete.
          * */
         val widthAnimator = ValueAnimator.ofInt(initialWidth,finalWidth)
+        val alphaAnimator = ObjectAnimator.ofFloat(binding.progressBar,"alpha",0f,1f)
 
         /**
          * Assign a 1,000 millisecond duration to the animator
          * */
         widthAnimator.duration = 1000
+        alphaAnimator.duration = 1000
 
         /**
          * Add an UpdateListener to the animator and assign the animatedValue as the width of the
@@ -111,11 +114,20 @@ class FavoriteButton @JvmOverloads constructor(
                 this.width = it.animatedValue as Int
             }
         }
+        alphaAnimator.addUpdateListener {
+            binding.progressBar.alpha = it.animatedValue as Float
+        }
+
+        binding.progressBar.apply {
+            alpha = 0f
+            isVisible = true
+        }
 
         /**
          * Finally, you start the animation
          * */
         widthAnimator.start()
+        alphaAnimator.start()
     }
 
 
