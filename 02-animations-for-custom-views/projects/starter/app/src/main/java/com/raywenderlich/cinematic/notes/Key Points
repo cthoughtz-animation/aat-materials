@@ -1,0 +1,8 @@
+* It's easier to work with complex animation when you break them down into smaller individual
+animations
+* You can reverse animations by calling the reverse() function.
+* You can create different value animations for different components of a custom view.
+* When creating a value animator on text size it needs to be an sp value, so you can divide the
+animated value by the screen density.
+* A custom view's animations can be fine turned and abstracted away from the custom view's consumer,
+keeping the code simple and the animations concise.
