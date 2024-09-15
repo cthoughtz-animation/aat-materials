@@ -1,12 +1,15 @@
 package com.raywenderlich.cinematic.details
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import com.raywenderlich.cinematic.R
 import com.raywenderlich.cinematic.databinding.ViewFavoriteButtonBinding
 import com.raywenderlich.cinematic.util.DisplayMetricsUtil
@@ -15,6 +18,8 @@ class FavoriteButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null, defStyle: Int = 0
 ) : ConstraintLayout(context, attrs, defStyle) {
+
+    private val TAG = "FavoriteButton"
 
     private val binding: ViewFavoriteButtonBinding =
         ViewFavoriteButtonBinding.inflate(LayoutInflater.from(context), this)
@@ -66,7 +71,51 @@ class FavoriteButton @JvmOverloads constructor(
 
         }
 
-        //TODO animate button
+        animateButton()
+    }
+
+    private fun animateButton() {
+        /**
+         * Set the initialWidth to the measured width of the button and the finalWidth to the
+         * measured height. You want the button to animate from its initial width to a final state
+         * where it becomes a circle. To convert a rectangle to a square, you need to make the
+         * width and height the same. By that same logic, since the button already has rounded
+         * corners, making the width and height the same makes it a circle.
+         * */
+        val initialWidth = binding.favoriteButton.measuredWidth
+        val finalWidth = binding.favoriteButton.measuredHeight
+
+        Log.d(TAG, "animateButton: initialWidth = $initialWidth")
+        Log.d(TAG, "animateButton: finalWidth = $finalWidth")
+
+        /**
+         * Instantiate a ValueAnimator using the static of Int, then pass the initialWidth and
+         * finalWidth to it
+         *
+         * The first parameter in this case is the original size that is drown the second value is
+         * the size after the animation is complete.
+         * */
+        val widthAnimator = ValueAnimator.ofInt(initialWidth,finalWidth)
+
+        /**
+         * Assign a 1,000 millisecond duration to the animator
+         * */
+        widthAnimator.duration = 1000
+
+        /**
+         * Add an UpdateListener to the animator and assign the animatedValue as the width of the
+         * button
+         * */
+        widthAnimator.addUpdateListener {
+            binding.favoriteButton.updateLayoutParams {
+                this.width = it.animatedValue as Int
+            }
+        }
+
+        /**
+         * Finally, you start the animation
+         * */
+        widthAnimator.start()
     }
 
 
