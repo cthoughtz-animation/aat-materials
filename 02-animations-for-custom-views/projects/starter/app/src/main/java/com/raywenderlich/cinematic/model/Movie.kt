@@ -47,46 +47,46 @@ import kotlinx.android.parcel.Parcelize
 data class Movie(
 
     @SerializedName("overview")
-    val overview: String = "",
+    var overview: String = "",
 
     @SerializedName("original_language")
-    val originalLanguage: String = "",
+    var originalLanguage: String = "",
 
     @SerializedName("original_title")
-    val originalTitle: String = "",
+    var originalTitle: String = "",
 
     @SerializedName("video")
-    val video: Boolean = false,
+    var video: Boolean = false,
 
     @SerializedName("title")
-    val title: String = "",
+    var title: String = "",
 
     @SerializedName("poster_path")
-    val posterPath: String = "",
+    var posterPath: String = "",
 
     @SerializedName("backdrop_path")
-    val backdropPath: String = "",
+    var backdropPath: String = "",
 
     @SerializedName("release_date")
-    val releaseDate: String = "",
+    var releaseDate: String = "",
 
     @SerializedName("popularity")
-    val popularity: Float = 0f,
+    var popularity: Float = 0f,
 
     @SerializedName("vote_average")
-    val voteAverage: Float = 0f,
+    var voteAverage: Float = 0f,
 
     @SerializedName("id")
     @PrimaryKey(autoGenerate = false)
-    val id: Int = 0,
+    var id: Int = 0,
 
     @SerializedName("adult")
-    val adult: Boolean = false,
+    var adult: Boolean = false,
 
     @SerializedName("vote_count")
-    val voteCount: Int = 0,
+    var voteCount: Int = 0,
 
-    val isFavorite: Boolean = false,
+    var isFavorite: Boolean = false,
 ) : Parcelable {
 
   val rating: Float

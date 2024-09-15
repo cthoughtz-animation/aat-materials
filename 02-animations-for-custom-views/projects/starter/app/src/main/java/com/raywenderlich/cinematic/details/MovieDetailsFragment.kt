@@ -100,6 +100,8 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_details) {
         is Events.Loading -> {
           binding.addToFavorites.showProgress()
         }
+
+        else -> {}
       }
     })
   }
