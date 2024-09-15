@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -86,6 +87,7 @@ class FavoriteButton @JvmOverloads constructor(
          * */
         val initialWidth = binding.favoriteButton.measuredWidth
         val finalWidth = binding.favoriteButton.measuredHeight
+        val initialTextSize = binding.favoriteButton.textSize
 
         Log.d(TAG, "animateButton: initialWidth = $initialWidth")
         Log.d(TAG, "animateButton: finalWidth = $finalWidth")
@@ -98,13 +100,29 @@ class FavoriteButton @JvmOverloads constructor(
          * the size after the animation is complete.
          * */
         val widthAnimator = ValueAnimator.ofInt(initialWidth,finalWidth)
+
         val alphaAnimator = ObjectAnimator.ofFloat(binding.progressBar,"alpha",0f,1f)
+
+        /**
+         * You just created a valueAnimator using the static ofFloat, then passed it the
+         * initialTextSize and a final text size value of 0.
+         * */
+        val textSizeAnimator = ValueAnimator.ofFloat(initialTextSize,0f)
 
         /**
          * Assign a 1,000 millisecond duration to the animator
          * */
         widthAnimator.duration = 1000
         alphaAnimator.duration = 1000
+
+        /**
+         * You've added an OvershootInterpolator to the animator and given it a 1,000 millisecond
+         * duration.
+         * */
+        textSizeAnimator.apply {
+            interpolator = OvershootInterpolator()
+            duration = 1000
+        }
 
         /**
          * Add an UpdateListener to the animator and assign the animatedValue as the width of the
@@ -119,18 +137,31 @@ class FavoriteButton @JvmOverloads constructor(
             binding.progressBar.alpha = it.animatedValue as Float
         }
 
+        /**
+         * This code assigned an updateListener to the animator and updated the text size of the
+         * button using animatedValue. Since the text size needs to be an sp value, you have to
+         * divide the animated value by the screen density.
+         * */
+        textSizeAnimator.addUpdateListener {
+            binding.favoriteButton.textSize = (it.animatedValue as Float) / resources
+                .displayMetrics.density
+        }
+
         binding.progressBar.apply {
             alpha = 0f
             isVisible = true
         }
 
-        animators.addAll(listOf(widthAnimator,alphaAnimator))
+        animators.addAll(listOf(widthAnimator,alphaAnimator,textSizeAnimator))
 
         /**
          * Finally, you start the animation
          * */
         widthAnimator.start()
+
         alphaAnimator.start()
+
+        textSizeAnimator.start()
     }
 
     private fun reverseAnimation() {
